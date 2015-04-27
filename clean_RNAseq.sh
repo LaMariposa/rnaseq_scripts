@@ -75,16 +75,70 @@ for ((a=0; a<${#id[@]}; a++))
 		fastqc -t $threads ${id[a]}.single.fastq 
 
                 #gzip final files and remove intermediates
-                gzip ${id[a]}.pair1.fastq &
-                gzip ${id[a]}.pair2.fastq &
-                gzip ${id[a]}.single.fastq &
+                gzip ${id[a]}.pair1.fastq 
+                gzip ${id[a]}.pair2.fastq 
+                gzip ${id[a]}.single.fastq 
 
 		rm ${id[a]}.trim.u1.fastq ${id[a]}.trim.u2.fastq ${id[a]}.trim.p1.fastq ${id[a]}.trim.p2.fastq ${id[a]}.notCombined_1.fastq ${id[a]}.notCombined_2.fastq ${id[a]}.extendedFrags.fastq ${id[a]}.hist ${id[a]}.histogram ${id[a]}.single1.fastq ${id[a]}.single2.fastq ${id[a]}.single3.fastq ${id[a]}.singlemerge.fastq 
 
-		echo -e "\ndone cleaning sample $id[a]}\n\n"				
+		echo -e "\ndone cleaning sample ${id[a]}\n\n"				
 
 	done
 
 echo DONE!!!
 echo | mutt -s "RNA-seq cleaning from $1 complete" $email
 
+
+
+##example input file to clean RNAseq reads prior to assembly (January 2014)
+#
+##input fastq files (make sure left and right match up in the order)
+##path to paired end files
+#files=/PATH/TO/FILES/
+##files
+#file1=( \
+#SAMPLE1_1.fastq.gz \
+#SAMPLE2_1.fastq.gz \
+#)
+#file2=( \
+#SAMPLE1_2.fastq.gz \
+#SAMPLE2_2.fastq.gz \
+#)
+##id
+#id=( SAMPLE1 SAMPLE2 )
+#
+##general parameter
+#minlen=30       #minimum read length to output in final file
+#
+##trimmomatic parameters
+#adapter=/storage/data_1/megan/programs/rnaseq_scripts/adapter.fasta
+#score=-phred33  #-phred33 or -phred64
+#headCropLen=6
+#seedMismatches=2
+#palindromeClipThreshold=30
+#simpleClipThreshold=12
+#windowSize=4
+#windowQuality=20
+#leadQuality=10
+#trailQuality=10
+#path_trimmomatic=/storage/data_1/megan/programs/Trimmomatic-Src-0.22/trimmomatic-0.22/dist/jar/trimmomatic-0.22.jar
+##MIN_PREFIX=8 path_trimmomatic=/usr/local/bin/Trimmomatic-0.22/trimmomatic-0.22.jar
+#
+##flash parameters
+#minOverlap=15
+#maxOverlap=70 #or calc from readlen, frag len, sd [70 is default for 100bp reads, 180bp frag, 18sd]
+#maxMismatchDensity=0.2
+#phredOffset=33
+#
+##Quake/Jellyfish parameters
+##quakeK=19
+##cov_cut=1
+##path_quake=/storage/data_1/megan/programs/Quake
+#
+##misc system and log files
+#threads=6
+#resourcelog=resource.log
+#
+##email for notification
+#email=YOU@DOMAIN.COM
+#
